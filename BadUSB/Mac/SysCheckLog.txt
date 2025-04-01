@@ -1,0 +1,104 @@
+REM Checks for system updates, storage type and storage info, RAM, checks your top 10 processes, and then closes. Everything will be saved in a log on the Mac you run this on. 
+REM Bluetooth BadUSB attacks sometimes fail to type correctly. USB connection recommended!
+REM Credit: GhosTech-IT on GitHub
+
+HOLD GUI
+HOLD SPACE
+RELEASE SPACE
+RELEASE GUI
+DELAY 1500
+
+REM === Open Spotlight and Search for Terminal ===
+STRING terminal
+WAIT_FOR_BUTTON_PRESS
+ENTER
+
+REM === Wait for the Flipper Button Press to Confirm the Terminal Opened ===
+WAIT_FOR_BUTTON_PRESS
+
+REM === Bring Terminal to Front ===
+STRING osascript -e 'tell application "Terminal" to activate' 
+WAIT_FOR_BUTTON_PRESS
+ENTER
+
+REM === Position Terminal on the Right Side of the Screen ===
+WAIT_FOR_BUTTON_PRESS
+STRING osascript -e 'tell application "Terminal" to set bounds of front window to {400, 200, 1200, 800}' 
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === System Maintenance Header ===
+STRING echo "=== System Maintenance Check - $(date) ===" | tee ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Software Update ===
+STRING echo "=== Software Update Check ===" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING softwareupdate -l | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Disk Utility Listing ===
+STRING echo "=== Disk Utility List ===" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING diskutil list | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Disk Type Check (SSD, HDD, NVMe, Fusion Drive, etc.) ===
+STRING echo "=== Checking Disk Type (SSD, HDD, NVMe, Fusion Drive) ===" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING system_profiler SPSerialATADataType SPNVMeDataType SPUSBDataType SPStorageDataType | grep -E "Medium Type|Device Name" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === RAM Information ===
+STRING echo "=== RAM Information ===" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING system_profiler SPHardwareDataType | grep "Memory" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Disk Space (df -h) ===
+STRING echo "=== Disk Space (df -h) ===" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING df -h | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Top Processes (First 10) ===
+STRING echo "=== Top Processes (First 10) ===" | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING top -l 1 | head -n 10 | tee -a ~/Desktop/system_check.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Close the Terminal After the Process is Done ===
+STRING osascript -e 'tell application "Terminal" to quit' 
+WAIT_FOR_BUTTON_PRESS
+ENTER
+
+REM === Optional: Click "OK" on Any Open Dialog (if applicable) ===
+WAIT_FOR_BUTTON_PRESS
+ENTER
