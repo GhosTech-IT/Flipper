@@ -1,5 +1,6 @@
 REM Performs system cleanup on macOS by clearing system cache, logs, and temporary files.
 REM Saves a single log of the cleanup process to the desktop.
+REM Removes all traces of execution except for the log file.
 REM Credit: GhosTech-IT on GitHub
 
 REM === Open Spotlight ===
@@ -73,6 +74,16 @@ WAIT_FOR_BUTTON_PRESS
 ENTER
 WAIT_FOR_BUTTON_PRESS
 STRING df -h >> ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Clear Terminal History to Remove Traces ===
+STRING echo "=== Clearing Terminal History for Security ==="
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING history -c && history -w
 WAIT_FOR_BUTTON_PRESS
 ENTER
 WAIT_FOR_BUTTON_PRESS
