@@ -1,0 +1,162 @@
+REM Automated Network Diagnostics for macOS
+REM Logs network details, connected devices, and performs a Wi-Fi scan.
+REM Ensures all traces are removed except for the log file.
+REM Credit: GhosTech-IT on GitHub
+
+REM === Open Spotlight ===
+HOLD GUI
+HOLD SPACE
+RELEASE SPACE
+RELEASE GUI
+WAIT_FOR_BUTTON_PRESS
+
+REM === Search for and Open Terminal ===
+STRING terminal
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Position Terminal in the Center of the Screen ===
+STRING osascript -e 'tell application "Terminal" to set bounds of front window to {400, 200, 1200, 800}'
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Create Log Header ===
+STRING echo "=== Network Diagnostics - $(date) ===" | tee ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Check Internet Connectivity ===
+STRING echo "=== Internet Connectivity Check ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING ping -c 4 8.8.8.8 | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Retrieve Network Configuration ===
+STRING echo "=== Network Configuration ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING ifconfig | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Get Wi-Fi SSID and Local IP ===
+STRING echo "=== Wi-Fi SSID & Local IP ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING networksetup -getairportnetwork en0 | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING ipconfig getifaddr en0 | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Get Public IP Address ===
+STRING echo "=== Public IP Address ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING curl -s ifconfig.me | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Check Network Speed ===
+STRING echo "=== Network Speed Test ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING networkQuality | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === List Available Wi-Fi Networks ===
+STRING echo "=== Available Wi-Fi Networks ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING airport -s | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Show Active Network Interfaces ===
+STRING echo "=== Active Network Interfaces ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING networksetup -listallhardwareports | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === List Connected Devices (ARP) ===
+STRING echo "=== Connected Devices via ARP ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING arp -a | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Install Nmap (If Not Installed, It Will Install; Otherwise, It Does Nothing) ===
+STRING echo "=== Installing Nmap (If Needed) ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING brew install nmap | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Run Nmap Scan for Active Devices ===
+STRING echo "=== Active Devices on Network (Nmap) ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING nmap -sn 192.168.1.0/24 | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Uninstall Nmap After Scan ===
+STRING echo "=== Uninstalling Nmap to Maintain System Integrity ===" | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING brew uninstall nmap | tee -a ~/Desktop/network_diagnostics.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Clear Terminal History to Remove Traces ===
+STRING echo "=== Clearing Terminal History for Security ==="
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING history -c && history -w
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Close the Terminal After Diagnostics ===
+STRING osascript -e 'tell application "Terminal" to quit'
+WAIT_FOR_BUTTON_PRESS
+ENTER
+
+REM === Optional: Click "OK" on Any Open Dialog (if applicable) ===
+WAIT_FOR_BUTTON_PRESS
+ENTER
