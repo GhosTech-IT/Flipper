@@ -1,1 +1,4 @@
-# BadUSB for Mac operating systems.
+# Flipper Zero BadUSB for Mac operating systems.
+# If you run these over bluetooth instead of USB, there may be issues with strings printing properly!
+# USB connection recommended!
+# These scripts make you need to click the middle button on your Flipper Zero for every action. This ensures that the script executes no matter how fast or laggy the computer is.
