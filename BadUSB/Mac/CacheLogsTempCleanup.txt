@@ -1,0 +1,87 @@
+REM Performs system cleanup on macOS by clearing system cache, logs, and temporary files.
+REM Saves a single log of the cleanup process to the desktop.
+REM Credit: GhosTech-IT on GitHub
+
+REM === Open Spotlight ===
+HOLD GUI
+HOLD SPACE
+RELEASE SPACE
+RELEASE GUI
+WAIT_FOR_BUTTON_PRESS
+
+REM === Search for and Open Terminal ===
+STRING terminal
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Position Terminal in the Center of the Screen ===
+STRING osascript -e 'tell application "Terminal" to set bounds of front window to {400, 200, 1200, 800}'
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Create and Start Cleanup Log ===
+STRING echo "=== System Cleanup - $(date) ===" > ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Clear System Cache ===
+STRING echo "=== Clearing System Cache ===" >> ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING sudo rm -rf ~/Library/Caches/* /Library/Caches/*
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Clear System Logs ===
+STRING echo "=== Clearing System Logs ===" >> ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING sudo rm -rf /private/var/log/*
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Clear Temporary Files ===
+STRING echo "=== Clearing Temporary Files ===" >> ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING sudo rm -rf /private/var/tmp/*
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Flush DNS Cache ===
+STRING echo "=== Flushing DNS Cache ===" >> ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Display Free Disk Space ===
+STRING echo "=== Free Disk Space After Cleanup ===" >> ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+STRING df -h >> ~/Desktop/system_cleanup.log
+WAIT_FOR_BUTTON_PRESS
+ENTER
+WAIT_FOR_BUTTON_PRESS
+
+REM === Close the Terminal After Cleanup ===
+STRING osascript -e 'tell application "Terminal" to quit'
+WAIT_FOR_BUTTON_PRESS
+ENTER
+
+REM === Optional: Click "OK" on Any Open Dialog (if applicable) ===
+WAIT_FOR_BUTTON_PRESS
+ENTER
